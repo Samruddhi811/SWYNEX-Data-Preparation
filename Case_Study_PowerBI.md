@@ -1,0 +1,87 @@
+# Business Intelligence Case Study: Reducing Customer Churn at Netflix
+
+**Author:** [Your Name] | **Program:** SWYNEX Technologies Data Analytics Internship (Task 4)
+**Tools:** Power BI Desktop, Power Query, DAX
+
+---
+
+## 1. Business Question
+
+Netflix earns recurring revenue, so every cancelled subscription is lost income. Leadership wants to know:
+
+> **Which customer segments are churning the most, and where should the retention team focus first?**
+
+Supporting questions:
+- What is the overall churn rate, and how does each segment compare with it?
+- Does churn differ by subscription plan, region and device?
+- Is lower engagement (watch hours) linked to higher churn?
+- How much monthly revenue is at risk?
+
+## 2. Data and Model
+
+**Data:** a Netflix customer dataset with one row per customer (churn status, watch hours, monthly revenue, plan, region, device, favourite genre, payment method). *[Add source and row count, e.g. "Kaggle, 5,000 customers".]*
+
+**Preparation (Power Query):** fixed data types, removed duplicates, handled blanks, standardised text, then split the data into a fact table and dimension tables.
+
+**Star schema:**
+
+```
+Dim_Subscription ─┐
+Dim_Region ───────┤
+Dim_Device ───────┼──► Fact_Customers
+Dim_Genre ────────┤
+Dim_Payment ──────┘
+```
+
+Each dimension joins to `Fact_Customers` with a one-to-many, single-direction relationship. A star schema keeps filters simple and fast, and lets any slicer filter every visual.
+
+**Key DAX measures** (stored in a `_Measures` table):
+
+| Measure | Purpose |
+|---|---|
+| Total Customers | Customer count in the current filter |
+| Churned Customers | Customers who cancelled |
+| Churn Rate % | Churned ÷ Total |
+| Overall Churn Rate | Benchmark that ignores slicers |
+| Churn vs Overall (pp) | Segment churn minus benchmark, in percentage points |
+| Avg Watch Hours | Engagement indicator |
+| Monthly Revenue | Revenue from the filtered customers |
+| Revenue at Risk | Revenue tied to churned customers |
+
+## 3. Dashboard
+
+The dashboard lets a business user explore churn without writing any code.
+
+- **KPI cards:** Total Customers, Churn Rate %, Avg Watch Hours, Revenue at Risk.
+- **Churn Rate by Subscription:** column chart (Basic, Standard, Premium).
+- **Churn Rate by Region:** bar chart across six regions.
+- **Table by Device:** churn rate, average watch hours and churn vs overall (pp).
+- **Slicers:** Favourite Genre and Payment Method. Every visual cross-filters when a slicer or bar is clicked.
+
+
+## 4. Five Key Insights
+
+> Values were read from the dashboard and should be re-checked with all slicers cleared.
+
+1. **The Basic plan is the biggest churn problem.** Churn is about **0.60** for Basic versus about **0.33** for Standard and **0.34** for Premium, nearly double.
+2. **North America churns most.** North America is highest at about **0.49** and South America follows at about **0.46**, while Asia is lowest at about **0.37**, a gap of roughly 12 percentage points.
+3. **Desktop users are the most loyal.** Desktop has the lowest churn (about **0.33**) and the highest engagement (about **14 hrs**), while TV (about 0.48) and Mobile (about 0.46) churn far more.
+4. **Engagement and churn move in opposite directions.** Devices with more watch hours (Desktop, 14.0) tend to have lower churn than lower-watch devices (Mobile 11.4, TV 11.4), so a drop in watch time is a useful early warning.
+5. **Revenue at risk is significant.** Churned customers represent **[X] per month** in Revenue at Risk *[fill from your KPI card]*. Reducing Basic plan churn would protect the largest share.
+
+## 5. Recommendations
+
+1. **Upgrade campaigns for Basic users** (discounts, free premium trials) to cut the highest-churn segment.
+2. **Regional retention offers** in North America and South America first.
+3. **Improve the TV and Mobile experience** and send re-engagement recommendations to low-watch-time users.
+4. **Monitor weekly:** use Churn vs Overall (pp) and Revenue at Risk to prioritise spending.
+
+## 6. Limitations and Next Steps
+
+- The data shows association, not proof of cause. A churn-reason survey would help.
+- No time dimension was used yet; adding a date table would enable trend and cohort analysis.
+- A predictive churn-score model could flag at-risk customers before they leave.
+
+## 7. Conclusion
+
+Churn is concentrated in a few identifiable groups: Basic plan subscribers, North America, and TV and Mobile users with low watch time. Targeting these segments first gives the retention team the best chance to protect revenue.
