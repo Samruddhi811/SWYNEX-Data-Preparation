@@ -143,7 +143,7 @@ SWYNEX-Interactive-Dashboard/
 
 ## 12. Author
 
-**[Your Name]**
+**Samruddhi Shelke**
 Data Analytics Intern, SWYNEX Technologies
 LinkedIn: www.linkedin.com/in/samruddhi-shelke-051bb9443
 GitHub: https://github.com/Samruddhi811
